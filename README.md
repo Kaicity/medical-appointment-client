@@ -1,9 +1,9 @@
 ## DONATE FOR ME
-## MOMO: 0368795645
+## MOMO: 0703338458
 
 ## Auth: 
-- anhdangcode.com
-- Phan Thành Công
+- https://portfolio-kaicitys-projects.vercel.app
+- Nguyễn Minh Thông
 
 ## Start project
 Ready: Node
