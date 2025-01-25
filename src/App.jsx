@@ -29,6 +29,7 @@ import StatisticsPage from "./pages/sales/Statistics";
 import updateLocale from "dayjs/plugin/updateLocale";
 import ChatPage from "./pages/Chat";
 import ChangePassPage from "./pages/ChangePass";
+import SpecialtyAndDoctorPage from "./pages/user/SpecialtyAndDoctor";
 
 dayjs.extend(updateLocale);
 dayjs.updateLocale("en", {
@@ -161,6 +162,15 @@ function App() {
             element={
               <PrivateRoute
                 element={<AppointmentsPage />}
+                requiredPermission={[TYPE_EMPLOYEE.user]}
+              />
+            }
+          />
+          <Route
+            path="/specialty-and-doctor"
+            element={
+              <PrivateRoute
+                element={<SpecialtyAndDoctorPage />}
                 requiredPermission={[TYPE_EMPLOYEE.user]}
               />
             }

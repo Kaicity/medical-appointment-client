@@ -149,12 +149,12 @@ const LayoutPage = () => {
           label: "Người dùng",
           link: "/users",
         });
-        menuItems.push(  {
+        menuItems.push({
           key: "chat",
           icon: <MessageOutlined />,
           label: "Tin nhắn",
           link: "/chat",
-        },);
+        });
         break;
       }
       case TYPE_EMPLOYEE.doctor: {
@@ -255,6 +255,12 @@ const LayoutPage = () => {
           icon: <CalendarOutlined />,
           label: "Lịch hẹn",
           link: "/appointment",
+        });
+        menuItems.push({
+          key: "specialty-and-doctor",
+          icon: <CalendarOutlined />,
+          label: "Chuyên khoa - Bác sỹ",
+          link: "/specialty-and-doctor",
         });
 
         break;

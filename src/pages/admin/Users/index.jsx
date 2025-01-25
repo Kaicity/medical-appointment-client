@@ -385,7 +385,11 @@ export default function UsersPage() {
         <Button
           type="primary"
           icon={<PlusCircleFilled />}
-          onClick={() => setIsVisible(true)}
+          onClick={() => {
+            form.resetFields();
+            setSelectedUser(null);
+            setIsVisible(true);
+          }}
         >
           Thêm nhân viên
         </Button>

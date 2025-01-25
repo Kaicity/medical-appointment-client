@@ -5,20 +5,17 @@ import {
   DatePicker,
   Flex,
   Form,
-  Grid,
   Input,
   Modal,
   Row,
-  Select,
   Space,
   Spin,
-  TimePicker,
   Typography,
   notification,
 } from "antd";
 import React, { useEffect, useState } from "react";
 import { DebounceSelect } from "../DeboundSelect";
-import { PlusOutlined, ReloadOutlined } from "@ant-design/icons";
+
 import AddPatientModal from "src/components/AddPatientModal";
 import dayjs from "dayjs";
 import { getUsers } from "src/api/user";
@@ -34,8 +31,8 @@ import {
   formatedDate,
   formatedTime,
   getSpecialtyName,
+  Specialties,
 } from "src/utils";
-import { formatDate } from "@fullcalendar/core";
 
 export default function AddAppointmentPatient({
   visible,
@@ -44,6 +41,7 @@ export default function AddAppointmentPatient({
   selectedPatient: patient,
   selectedAppointent = {},
   isPatient = false,
+  doctorValue,
 }) {
   const [form] = Form.useForm();
   const [isCreatePatientModal, setIsCreatePatientModal] = useState(false);
@@ -54,6 +52,16 @@ export default function AddAppointmentPatient({
   const [listTimeSlots, setListTimeSlots] = useState([]);
   const [specialty, setSpecialty] = useState("");
   const [doctorId, setDoctorId] = useState("");
+
+  useEffect(() => {
+    if (doctorValue) {
+      const { _id, specialty } = doctorValue;
+      setSpecialty(specialty);
+      setDoctorId(_id);
+      form.setFieldValue("specialty", specialty);
+      form.setFieldValue("doctor", _id);
+    }
+  }, [form, patient, selectedAppointent, visible]);
 
   useEffect(() => {
     if (visible) {
@@ -123,12 +131,13 @@ export default function AddAppointmentPatient({
         } else {
           const result = await createAppointment({
             patientId: isPatient ? patient._id : values.patientId,
-            doctorId: values.doctor._id,
+            doctorId: doctorValue ? doctorId : values.doctor._id,
             specialty: values.specialty,
             time: selectedHour,
             date: dayjs(values.date).format(FORMAT_DATE),
             status: "booked",
           });
+
           form.resetFields();
           setSelectedHour(null);
           notification.success({
@@ -255,14 +264,23 @@ export default function AddAppointmentPatient({
               },
             ]}
           >
-            <SelectSpecialty
-              onChange={(item) => {
-                setSpecialty(item);
-                form.setFieldValue("doctor", null);
-                setDoctorId("");
-                setRefreshData(!refreshData);
-              }}
-            />
+            {doctorValue ? (
+              <Input
+                readOnly
+                defaultValue={
+                  Specialties.find((item) => item.id === specialty)?.name || ""
+                }
+              />
+            ) : (
+              <SelectSpecialty
+                onChange={(item) => {
+                  setSpecialty(item);
+                  form.setFieldValue("doctor", null);
+                  setDoctorId("");
+                  setRefreshData(!refreshData);
+                }}
+              />
+            )}
           </Form.Item>
           <Form.Item
             label="Chọn bác sĩ"
@@ -275,7 +293,14 @@ export default function AddAppointmentPatient({
               },
             ]}
           >
-            <SelectDoctor onChange={handleChangeDoctor} specialty={specialty} />
+            {doctorValue ? (
+              <Input readOnly value={doctorValue?.fullName} />
+            ) : (
+              <SelectDoctor
+                onChange={handleChangeDoctor}
+                specialty={specialty}
+              />
+            )}
           </Form.Item>
           <Flex gap={20}>
             <Form.Item

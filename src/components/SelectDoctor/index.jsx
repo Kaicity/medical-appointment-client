@@ -1,9 +1,19 @@
 import React, { useState } from "react";
-import { Select, Typography, Popover, Input, List, Space } from "antd";
-import { Gender, Specialties, TYPE_EMPLOYEE_STR, birthdayAndAge } from "src/utils";
 import {
-  ArrowDownOutlined,
-  CaretDownOutlined,
+  Select,
+  Typography,
+  Popover,
+  Input,
+  List,
+  Space,
+  Avatar,
+  Row,
+  Tag,
+} from "antd";
+import { Gender, TYPE_EMPLOYEE_STR, getSourceImage } from "src/utils";
+import {
+  BlockOutlined,
+  CheckCircleOutlined,
   DownOutlined,
 } from "@ant-design/icons";
 import { useEffect } from "react";
@@ -51,11 +61,35 @@ const SelectDoctorMemo = ({ onChange, specialty, doctor: doctorForm }) => {
           className="customDropdown-item"
           onClick={() => handleDoctorChange(item)}
         >
-          <List.Item.Meta title={item.fullName} description={<Space>
-           <Typography.Text>{TYPE_EMPLOYEE_STR[item.userType]}</Typography.Text>
-           -
-           <Typography.Text>{Gender[item?.gender]}</Typography.Text>
-          </Space>} />
+          <List.Item.Meta
+            avatar={<Avatar src={getSourceImage(item.photo)} />}
+            title={item.fullName}
+            description={
+              <Row justify={"space-between"}>
+                <Space>
+                  <Typography.Text>
+                    {TYPE_EMPLOYEE_STR[item.userType]}
+                  </Typography.Text>
+                  -<Typography.Text>{Gender[item?.gender]}</Typography.Text>
+                </Space>
+                <Space>
+                  <Tag
+                    icon={
+                      item?.activeStatus ? (
+                        <CheckCircleOutlined />
+                      ) : (
+                        <BlockOutlined />
+                      )
+                    }
+                    color={item?.activeStatus ? "green" : "red"}
+                    key={item?.activeStatus}
+                  >
+                    {item?.activeStatus ? "Đang hoạt động" : "Đã khóa"}
+                  </Tag>
+                </Space>
+              </Row>
+            }
+          />
         </List.Item>
       )}
     />
